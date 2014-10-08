@@ -20,7 +20,6 @@
  */
 (function ($) {
     //GLOBAL VARIABLES
-    var isIE6 = ($.browser.msie && $.browser.version < 7);
     var body = $(document.body);
     var window = $(window);
     var jqzoompluging_disabled = false; //disabilita globalmente il plugin
@@ -366,11 +365,11 @@
                 this.node.css({
                     top: 0,
                     left: 0,
-                    width: this.node.w + 'px',
-                    height: this.node.h + 'px',
+                    width: this.node.w,
+                    height: this.node.h,
                     position: 'absolute',
                     display: 'none',
-                    borderWidth: 1 + 'px'
+                    borderWidth: 1
                 });
                 if (settings.zoomType == 'reverse') {
                     this.image.src = smallimage.node.src;
@@ -379,8 +378,8 @@
                     });
                     $(this.image).css({
                         position: 'absolute',
-                        left: -(this.node.left + 1 - smallimage.bleft) + 'px',
-                        top: -(this.node.top + 1 - smallimage.btop) + 'px'
+                        left: -(this.node.left + 1 - smallimage.bleft),
+                        top: -(this.node.top + 1 - smallimage.btop)
                     });
                 }
             };
@@ -396,8 +395,8 @@
                 if (settings.zoomType == 'reverse') {
                     $(this.image).css({
                         position: 'absolute',
-                        left: -(this.node.left + 1 - smallimage.bleft) + 'px',
-                        top: -(this.node.top + 1 - smallimage.btop) + 'px'
+                        left: -(this.node.left + 1 - smallimage.bleft),
+                        top: -(this.node.top + 1 - smallimage.btop)
                     });
                 }
                 //centering large image
@@ -441,14 +440,14 @@
                 this.node.left = lensleft;
                 this.node.top = lenstop;
                 this.node.css({
-                    'left': lensleft + 'px',
-                    'top': lenstop + 'px'
+                    'left': lensleft,
+                    'top': lenstop
                 });
                 if (settings.zoomType == 'reverse') {
                     $(this.image).css({
                         position: 'absolute',
-                        left: -(this.node.left + 1 - smallimage.bleft) + 'px',
-                        top: -(this.node.top + 1 - smallimage.btop) + 'px'
+                        left: -(this.node.left + 1 - smallimage.bleft),
+                        top: -(this.node.top + 1 - smallimage.btop)
                     });
                 }
                 largeimage.setposition();
@@ -512,8 +511,8 @@
                     }
                 }
                 this.node.css({
-                    'left': this.node.leftpos + 'px',
-                    'top': this.node.toppos + 'px'
+                    'left': this.node.leftpos,
+                    'top': this.node.toppos
                 });
                 return this;
             };
@@ -530,12 +529,12 @@
                     });
                     var thickness = (smallimage.bleft == 0) ? 1 : smallimage.bleft;
                     $('.zoomWrapper', this.node).css({
-                        width: smallimage.w + 'px',
-                        borderWidth: thickness + 'px'
+                        width: smallimage.w,
+                        borderWidth: thickness
                     });
                     $('.zoomWrapperImage', this.node).css({
                         width: '100%',
-                        height: smallimage.h + 'px'
+                        height: smallimage.h
                     });
                     $('.zoomWrapperTitle', this.node).css({
                         width: '100%',
@@ -544,11 +543,11 @@
                 }
                 else {
                     $('.zoomWrapper', this.node).css({
-                        width: Math.round(settings.zoomWidth) + 'px'
+                        width: Math.round(settings.zoomWidth)
                     });
                     $('.zoomWrapperImage', this.node).css({
                         width: '100%',
-                        height: Math.round(settings.zoomHeight) + 'px'
+                        height: Math.round(settings.zoomHeight)
                     });
                     $('.zoomWrapperTitle', this.node).css({
                         width: '100%',
@@ -583,23 +582,6 @@
                     this.node.show();
                     break;
                 }
-                if (isIE6 && settings.zoomType != 'innerzoom') {
-                    this.ieframe.width = this.node.width();
-                    this.ieframe.height = this.node.height();
-                    this.ieframe.left = this.node.leftpos;
-                    this.ieframe.top = this.node.toppos;
-                    this.ieframe.css({
-                        display: 'block',
-                        position: "absolute",
-                        left: this.ieframe.left,
-                        top: this.ieframe.top,
-                        zIndex: 99,
-                        width: this.ieframe.width + 'px',
-                        height: this.ieframe.height + 'px'
-                    });
-                    $('.zoomPad', el).append(this.ieframe);
-                    this.ieframe.show();
-                };
             };
         };
 /*========================================================,
@@ -662,8 +644,8 @@
                 var left = -el.scale.x * (lens.getoffset().left - smallimage.bleft + 1);
                 var top = -el.scale.y * (lens.getoffset().top - smallimage.btop + 1);
                 $(this.node).css({
-                    'left': left + 'px',
-                    'top': top + 'px'
+                    left: left,
+                    top: top
                 });
             };
             return this;

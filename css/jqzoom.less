@@ -1,0 +1,178 @@
+/**
+ * Variables
+ */
+  //Base
+    @font-base: "Arial Narrow", Arial, Helvetica, sans-serif;
+    @base-zIndex: 100;
+  
+  //Preload
+    @preload-bg-color: rgba(221, 221, 221, 0.8);
+    @preload-border: 1px solid rgb(175, 175, 175);
+    @preload-color: #444;
+    @preload-font-size: 10px;
+    @preload-img-path: "../images";
+
+  //Zoom Pup
+    @zoompup-bg: #fff;
+    @zoompup-border: 1px solid #ddd;
+
+  //Zoom Pup  
+    @zoompad-border: 1px solid #ddd;
+
+  //Zoom Overlay
+    @overlay-bg: #fff;
+
+  //Zoom Wrapper
+    @zoom-wrap-border: #909090;
+    @zoom-wrap-title-bg: #313131;
+    @zoom-wrap-title-color: #e5e5e5;
+    @zoom-wrap-title-height: 20px;
+
+  //Thumbs
+    @thumb-border: 1px solid transparent;
+    @thumb-border-active: 1px solid #999;
+
+
+.opacity(@val: 1) {
+
+  @ieOpacity: @val*100;
+  -webkit-opacity: @val;
+  -moz-opacity: @val;
+  opacity: @val;
+  filter: ~"alpha(opacity=@{ieOpacity})";
+
+}
+
+.zoomPad {
+  border: @zoompad-border;
+	position:relative;
+	float:left;
+	z-index: @base-zIndex;
+	cursor:zoom-in;
+
+  .zoomPup {
+    .opacity(0.6);
+    background: @zoompup-bg;
+    border:@zoompup-border;
+    cursor:-webkit-zoom-in; 
+    cursor:-moz-zoom-in;
+    cursor: zoom-in;
+    overflow:hidden;
+    position:absolute;
+    z-index:@base-zIndex + 20;
+  }
+
+  .zoomPreload {
+    //.opacity(0.8);
+    background: @preload-bg-color url('@{preload-img-path}/zoomloader.gif') center 30px no-repeat;
+    border: @preload-border;
+    color: @preload-color;
+    font: @preload-font-size @font-base;
+    height: 43px;
+    left: 0;
+    padding: 8px;
+    position: absolute;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    top: 0;
+    z-index: @base-zIndex + 10;
+    width: 50%;
+  }
+
+  .zoomWindow {
+    background:#fff;
+    height:auto;
+    left:100%;
+    position:absolute;
+    top:0;
+    z-index:@base-zIndex + 15;
+
+    .zoomWrapper{
+      position:relative;
+      border:@zoom-wrap-border;
+      z-index:@base-zIndex + 15;
+
+      .zoomWrapperTitle {
+        .opacity(0.6);
+        background:@zoom-wrap-title-bg;
+        color:@zoom-wrap-title-color;
+        display:block;
+        font-size:10px;
+        height:@zoom-wrap-title-height;
+        left:0;
+        line-height:@zoom-wrap-title-height;
+        overflow:hidden;
+        position:absolute;
+        text-align:center;
+        text-transform: uppercase;
+        top:0;
+        z-index:@base-zIndex + 20;
+        width:100%;
+      }
+
+      .zoomWrapperImage {
+        display:block;
+        position:relative;
+        overflow:hidden;
+        z-index:@base-zIndex + 10;
+        width: 100%;
+
+        img {
+          border:0 none;
+          display:block;
+          position:absolute;
+          z-index:@base-zIndex + 5;
+        }
+
+
+
+      }
+    }
+  }
+}
+
+.zoomOverlay {
+	background: @overlay-bg;
+  display:none;
+	height:100%;
+  left:0;
+  position:absolute;
+  top:0;
+  z-index:@base-zIndex +30;
+  width:100%;
+}
+
+
+.zoom-thumbs-list {
+  display:block;
+  margin-top: 15px;
+  padding-left: 0;
+
+  li {
+    float:left;
+    margin-right:5px;
+    list-style:none;
+
+    a {
+      display:block;
+      border:@thumb-border;
+
+      &.zoomThumbActive{
+        border:@thumb-border-active;
+      }
+    }
+  }
+}
+
+.zoomIframe{
+  z-index: -1;
+  .opacity(0.8);
+  position:absolute;
+  display:block;
+}
+
+/*********************************************************
+/ When clicking on thumbs jqzoom will add the class
+/ "zoomThumbActive" on the anchor selected
+/*********************************************************/

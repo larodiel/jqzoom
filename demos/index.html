@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jqzoom Demos</title>
+	<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+  <!-- jqzoom -->
+    
+    <link rel="stylesheet" href="../css/jquery.jqzoom.css" type="text/css">
+    <script src="../js/jquery.jqzoom-core.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+      $(document).ready(function() {
+
+        $('.jqzoom-standard').jqzoom({
+            zoomType: 'standard',
+            lens:true,
+            preloadImages: false,
+            alwaysOn:false
+        });
+
+        $('.jqzoom-innerzoom').jqzoom({
+            zoomType: 'innerzoom',
+            preloadImages: false,
+            alwaysOn:false
+        });
+
+        $('.jqzoom-move').jqzoom({
+            zoomType: 'standard',
+            lens:true,
+            preloadImages: false,
+            alwaysOn:false,
+            zoomWidth: 200,
+            zoomHeight: 200,
+            xOffset:90,
+            yOffset:30,
+            position:'left'
+        });
+
+        $('.jqzoom-reverse').jqzoom({
+            zoomType: 'reverse',
+            lens:true,
+            preloadImages: false,
+            alwaysOn:false
+        });
+
+
+        $('.jqzoom-always').jqzoom({
+            zoomType: 'standard',
+            lens:true,
+            preloadImages: false,
+            alwaysOn:true
+        });
+
+        $('.jqzoom-drag').jqzoom({
+            zoomType: 'drag',
+            lens:true,
+            preloadImages: false
+        });
+        
+      });
+
+
+    </script>
+  <!-- jqzoom -->
+
+</head>
+<body>
+
+	<div class="container">
+		<div class="row">
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist">
+			  <li class="active"><a href="#standard" role="tab" data-toggle="tab">Standard</a></li>
+			  <li><a href="#innerzoom" role="tab" data-toggle="tab">Inner Zoom</a></li>
+			  <li><a href="#reverse" role="tab" data-toggle="tab">Reverse</a></li>
+			  <li><a href="#settings" role="tab" data-toggle="tab">Settings</a></li>
+			</ul>
+
+			<!-- Tab panes -->
+			<div class="tab-content">
+			  <div class="tab-pane active" id="standard">
+
+          <div class="row">
+              <div class="col-md-12">
+                <a href="imgProd/triumph_big1.jpg" class="jqzoom-standard" rel='gal1'  title="triumph" >
+                    <img src="imgProd/triumph_small1.jpg"  title="triumph">
+                </a>
+              </div>
+          </div>
+          <ul id="thumblist" class="clearfix zoom-thumbs-list list-unstyled" >
+              <li>
+                <a class="zoomThumbActive" href='javascript:void(0);' rel="{gallery: 'gal1', smallimage: './imgProd/triumph_small1.jpg',largeimage: './imgProd/triumph_big1.jpg'}">
+                  <img src='imgProd/thumbs/triumph_thumb1.jpg'>
+                </a>
+              </li>
+              <li>
+                <a href='javascript:void(0);' rel="{gallery: 'gal1', smallimage: './imgProd/triumph_small2.jpg',largeimage: './imgProd/triumph_big2.jpg'}">
+                  <img src='imgProd/thumbs/triumph_thumb2.jpg'>
+                </a>
+              </li>
+              <li><a  href='javascript:void(0);' rel="{gallery: 'gal1', smallimage: './imgProd/triumph_small3.jpg',largeimage: './imgProd/triumph_big3.jpg'}"><img src='imgProd/thumbs/triumph_thumb3.jpg'></a></li>
+          </ul>
+
+        </div>
+
+			  <div class="tab-pane" id="innerzoom">
+       
+          <div class="row">
+            <div class="col-md-12">
+              <a href="imgProd/triumph_big1.jpg" class="jqzoom-innerzoom" rel='gal1'  title="triumph" >
+                  <img src="imgProd/triumph_small1.jpg"  title="triumph">
+              </a>
+            </div>
+          </div>
+
+          <ul id="thumblist" class="clearfix zoom-thumbs-list" >
+            <li><a class="zoomThumbActive" href='javascript:void(0);' rel="{gallery: 'gal1', smallimage: './imgProd/triumph_small1.jpg',largeimage: './imgProd/triumph_big1.jpg'}"><img src='imgProd/thumbs/triumph_thumb1.jpg'></a></li>
+            <li><a href='javascript:void(0);' rel="{gallery: 'gal1', smallimage: './imgProd/triumph_small2.jpg',largeimage: './imgProd/triumph_big2.jpg'}"><img src='imgProd/thumbs/triumph_thumb2.jpg'></a></li>
+            <li><a  href='javascript:void(0);' rel="{gallery: 'gal1', smallimage: './imgProd/triumph_small3.jpg',largeimage: './imgProd/triumph_big3.jpg'}"><img src='imgProd/thumbs/triumph_thumb3.jpg'></a></li>
+          </ul>
+
+        </div>
+
+         <div class="tab-pane" id="reverse">
+       
+          <div class="row">
+            <div class="col-md-12">
+              <a href="imgProd/triumph_big1.jpg" class="jqzoom-reverse" rel='gal1'  title="triumph" >
+                  <img src="imgProd/triumph_small1.jpg"  title="triumph">
+              </a>
+            </div>
+          </div>
+
+          <ul id="thumblist" class="clearfix zoom-thumbs-list" >
+            <li><a class="zoomThumbActive" href='javascript:void(0);' rel="{gallery: 'gal1', smallimage: './imgProd/triumph_small1.jpg',largeimage: './imgProd/triumph_big1.jpg'}"><img src='imgProd/thumbs/triumph_thumb1.jpg'></a></li>
+            <li><a href='javascript:void(0);' rel="{gallery: 'gal1', smallimage: './imgProd/triumph_small2.jpg',largeimage: './imgProd/triumph_big2.jpg'}"><img src='imgProd/thumbs/triumph_thumb2.jpg'></a></li>
+            <li><a  href='javascript:void(0);' rel="{gallery: 'gal1', smallimage: './imgProd/triumph_small3.jpg',largeimage: './imgProd/triumph_big3.jpg'}"><img src='imgProd/thumbs/triumph_thumb3.jpg'></a></li>
+          </ul>
+
+        </div>
+
+			  <div class="tab-pane" id="messages">...</div>
+			  <div class="tab-pane" id="settings">...</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
