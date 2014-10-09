@@ -16,10 +16,11 @@
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
- * Date: 11 April 2011 22:16:00
+ * Date: 09 October 2014 12:40:00
  */
 (function ($) {
     //GLOBAL VARIABLES
+    //var isIE6 = ($.browser.msie && $.browser.version < 7);
     var body = $(document.body);
     var window = $(window);
     var jqzoompluging_disabled = false; //disabilita globalmente il plugin
@@ -48,6 +49,8 @@
         el.timer = null;
         el.mousepos = {};
         el.mouseDown = false;
+        el.positionAround = (settings.positionAround != null && settings.positionAround.length) ? [ settings.positionAround.offset().left, settings.positionAround.offset().top ] : null;
+        
         $(el).css({
             'outline-style': 'none',
             'text-decoration': 'none'
@@ -84,7 +87,12 @@
                     lens.append();
                 }
                 //creating zoomWindow
-                if ($(".zoomWindow", el).length == 0) {
+                
+                if (settings.positionAround != null && el.zoomWindow === true) {
+                    stage.append();
+                }
+                else if($(".zoomWindow", el).length == 0)
+                {
                     stage.append();
                 }
                 //creating Preload
@@ -121,7 +129,7 @@
                         cursor: 'crosshair'
                     });
                 }
-                $(".zoomPad", el).bind('mouseenter mouseover', function (event) {
+                $(".zoomPad", el).bind('mouseenter', function (event) {
                     img.attr('title', '');
                     $(el).attr('title', '');
                     el.zoom_active = true;
@@ -140,11 +148,13 @@
                 $(".zoomPad", el).bind('mousemove', function (e) {
                     //prevent fast mouse mevements not to fire the mouseout event
                     if (e.pageX > smallimage.pos.r || e.pageX < smallimage.pos.l || e.pageY < smallimage.pos.t || e.pageY > smallimage.pos.b) {
-                        lens.setcenter();
+                        //lens.setcenter();
+                        obj.deactivate();
                         return false;
                     }
                     el.zoom_active = true;
-                    if (el.largeimageloaded && !$('.zoomWindow', el).is(':visible')) {
+
+                    if (el.largeimageloaded && !$('.zoomWindow', el.outerZoomPad).is(':visible')) {
                         obj.activate(e);
                     }
                     if (el.largeimageloaded && (settings.zoomType != 'drag' || (settings.zoomType == 'drag' && el.mouseDown))) {
@@ -292,17 +302,22 @@
                 $obj.h = image.height();
                 $obj.ow = image.outerWidth();
                 $obj.oh = image.outerHeight();
-                $obj.pos = image.offset();
+                /*$obj.pos = image.offset();
                 $obj.pos.l = image.offset().left + $obj.bleft;
-                $obj.pos.t = image.offset().top + $obj.btop;
+                $obj.pos.t = image.offset().top + $obj.btop;*/
+                $obj.pos = (settings.positionAround != null && settings.positionAround.length) ? settings.positionAround.offset() : image.offset();
+               $obj.pos.l = $obj.pos.left + $obj.bleft;
+               $obj.pos.t = $obj.pos.top + $obj.btop;
                 $obj.pos.r = $obj.w + $obj.pos.l;
                 $obj.pos.b = $obj.h + $obj.pos.t;
-                $obj.rightlimit = image.offset().left + $obj.ow;
-                $obj.bottomlimit = image.offset().top + $obj.oh;
+                /*$obj.rightlimit = image.offset().left + $obj.ow;
+                $obj.bottomlimit = image.offset().top + $obj.oh;*/
+                $obj.rightlimit = $obj.pos.left + $obj.ow;
+               $obj.bottomlimit = $obj.pos.top + $obj.oh;
             };
             this.node.onerror = function () {
-                alert('Problems while loading image.');
-                throw 'Problems while loading image.';
+                //alert('Problems while loading image.');
+                //throw 'Problems while loading image.';
             };
             this.node.onload = function () {
                 $obj.fetchdata();
@@ -348,11 +363,16 @@
             var $obj = this;
             this.node = $('<div/>').addClass('zoomPup');
             this.append = function () {
-                $('.zoomPad', el).append($(this.node).hide());
+                //$('.zoomPad', el).append($(this.node).hide());
+
+                el.zoomWindow = true;
+                el.outerZoomPad = (settings.appendZoomTo !== null) ? $('<div class="outerZoomPad"/>').appendTo(settings.appendZoomTo) : $('.zoomPad', el);
+                el.outerZoomPad.append(this.node);
+
                 if (settings.zoomType == 'reverse') {
                     this.image = new Image();
                     this.image.src = smallimage.node.src; // fires off async
-                    $(this.node).empty().append(this.image);
+                    settings.positionAround != null ? $(this.node).empty().append(this.image) : $( this.node ).css({'opacity' : 0.3});
                     //$( this.node ).css({'opacity' : 1});
                 }
             };
@@ -510,14 +530,32 @@
                         break;
                     }
                 }
-                this.node.css({
-                    'left': this.node.leftpos,
-                    'top': this.node.toppos
-                });
+
+                if(el.positionAround != null) {
+                    this.node.css({
+                        'left': el.positionAround[0],
+                        'top' : el.positionAround[1]
+                    });
+                }
+                else {
+                    this.node.css({
+                        'left': this.node.leftpos,
+                     'top': this.node.toppos
+                    });
+                    
+                }
+                
                 return this;
             };
             this.append = function () {
-                $('.zoomPad', el).append(this.node);
+
+                if(settings.appendZoomTo != null) {
+                    $('.outerZoomPad').append(this.node);
+                }
+                else {
+                    $('.zoomPad', el).append(this.node);
+                }
+
                 this.node.css({
                     position: 'absolute',
                     display: 'none',
@@ -564,7 +602,7 @@
             this.hide = function () {
                 switch (settings.hideEffect) {
                 case 'fadeout':
-                    this.node.fadeOut(settings.fadeoutSpeed, function () {});
+                    this.node.stop().css({opacity:1}).fadeOut(settings.fadeoutSpeed, function () { });
                     break;
                 default:
                     this.node.hide();
@@ -575,13 +613,30 @@
             this.show = function () {
                 switch (settings.showEffect) {
                 case 'fadein':
-                    this.node.fadeIn();
-                    this.node.fadeIn(settings.fadeinSpeed, function () {});
+                    this.node.stop().css({opacity:1}).fadeIn(settings.fadeinSpeed, function () { });
                     break;
                 default:
                     this.node.show();
                     break;
                 }
+                /*if (isIE6 && settings.zoomType != 'innerzoom') {
+                    this.ieframe.width = this.node.width();
+                    this.ieframe.height = this.node.height();
+                    this.ieframe.left = this.node.leftpos;
+                    this.ieframe.top = this.node.toppos;
+                    this.ieframe.css({
+                        display: 'block',
+                        position: "absolute",
+                        left: this.ieframe.left,
+                        top: this.ieframe.top,
+                        zIndex: 99,
+                        width: this.ieframe.width,
+                        height: this.ieframe.height
+                    });
+                    $('.zoomPad', el).append(this.ieframe);
+                    el.outerZoomPad.append(this.ieframe);
+                    this.ieframe.show();
+                };*/
             };
         };
 /*========================================================,
@@ -612,19 +667,23 @@
                 $obj.w = image.width();
                 $obj.h = image.height();
                 $obj.pos = image.offset();
-                $obj.pos.l = image.offset().left;
-                $obj.pos.t = image.offset().top;
+                /*$obj.pos.l = image.offset().left;
+                $obj.pos.t = image.offset().top;*/
+                $obj.pos.l = $obj.pos.left;
+                $obj.pos.t = $obj.pos.top;
                 $obj.pos.r = $obj.w + $obj.pos.l;
                 $obj.pos.b = $obj.h + $obj.pos.t;
                 scale.x = ($obj.w / smallimage.w);
                 scale.y = ($obj.h / smallimage.h);
                 el.scale = scale;
                 document.body.removeChild(this.node);
+                //$('.zoomWrapperImage', el).empty().append(this.node);
+                //(settings.outerZoomPad !== null) ? $('.zoomWrapperImage', el.outerZoomPad).empty().append(this.node) : $('.zoomWrapperImage', el).empty().append(this.node);
                 $('.zoomWrapperImage', el).empty().append(this.node);
                 //setting lens dimensions;
                 lens.setdimensions();
             };
-            this.node.onerror = function () {
+            this.node.onerror = function (e) {
                 alert('Problems while loading the big image.');
                 throw 'Problems while loading the big image.';
             };
@@ -644,8 +703,8 @@
                 var left = -el.scale.x * (lens.getoffset().left - smallimage.bleft + 1);
                 var top = -el.scale.y * (lens.getoffset().top - smallimage.btop + 1);
                 $(this.node).css({
-                    left: left,
-                    top: top
+                    'left': left,
+                    'top': top
                 });
             };
             return this;
@@ -661,7 +720,7 @@
             //zoomWindow  default width
             zoomHeight: 300,
             //zoomWindow  default height
-            xOffset: 10,
+            xOffset: "100%",
             //zoomWindow x offset, can be negative(more on the left) or positive(more on the right)
             yOffset: 0,
             //zoomWindow y offset, can be negative(more on the left) or positive(more on the right)
@@ -680,7 +739,12 @@
             //hide/fadeout
             fadeinSpeed: 'slow',
             //fast/slow/number
-            fadeoutSpeed: '2000' //fast/slow/number
+            fadeoutSpeed: '2000', //fast/slow/number
+
+            appendZoomTo: null,
+            // jquery seleced object to append an external zoomPad to; i.e. appendZoomTo: $('body'),
+            positionAround: null
+            // jquery selected object to position the zoomPad around, in case it isn't the image itself; i.e. positionAround: $('#sidebar'),
         },
         disable: function (el) {
             var api = $(el).data('jqzoom');

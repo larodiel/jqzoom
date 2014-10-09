@@ -47,7 +47,7 @@
   border: @zoompad-border;
 	position:relative;
 	float:left;
-	z-index: @base-zIndex;
+	z-index: @base-zIndex - 1;
 	cursor:zoom-in;
 
   .zoomPup {
@@ -59,7 +59,7 @@
     cursor: zoom-in;
     overflow:hidden;
     position:absolute;
-    z-index:@base-zIndex + 20;
+    z-index:@base-zIndex + 1;
   }
 
   .zoomPreload {
@@ -86,12 +86,12 @@
     left:100%;
     position:absolute;
     top:0;
-    z-index:@base-zIndex + 15;
+    z-index:@base-zIndex + 10;
 
     .zoomWrapper{
       position:relative;
       border:@zoom-wrap-border;
-      z-index:@base-zIndex + 15;
+      z-index:@base-zIndex + 10;
 
       .zoomWrapperTitle {
         .opacity(0.6);
@@ -122,7 +122,7 @@
           border:0 none;
           display:block;
           position:absolute;
-          z-index:@base-zIndex + 5;
+          z-index:@base-zIndex + 1;
         }
 
 
@@ -139,7 +139,7 @@
   left:0;
   position:absolute;
   top:0;
-  z-index:@base-zIndex +30;
+  z-index:@base-zIndex + 1;
   width:100%;
 }
 
